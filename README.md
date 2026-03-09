@@ -79,6 +79,10 @@ Se establece una frecuencia de **252**, ya que los mercados financieros tienen a
 
 Posteriormente se realiza una **visualización inicial** de la serie para observar tendencias y posibles patrones.
 
+<img width="890" height="491" alt="image" src="https://github.com/user-attachments/assets/04d36d55-6517-42d9-9907-a67008777466" />
+
+En la gráfica podemos observar que hay una tendencia clara ascendente, con algunos picos de bajada o de subida. Sin embargo, no se puede observar un patrón claro. Aunque posteriormente, al descomponer la serie si podemos ver en la gráfica estacionaria un patrón
+
 ---
 
 ## 2. Descomposición de la serie temporal
@@ -97,6 +101,10 @@ para separar la serie en tres componentes:
 
 Esto permite analizar si existen patrones estacionales dentro de los datos.
 
+<img width="890" height="491" alt="image" src="https://github.com/user-attachments/assets/e5f1bfd6-2d8b-4d69-a99c-3635c69e3584" />
+
+Si observamos la gráfica estacional, podemos concluir que hay un patrón que se repite cada año, y es que al iniciar el año, suele caer el valor de las acciones, y en verano suele subir bastante las acciones
+
 ---
 
 ## 3. Análisis de estacionariedad
@@ -113,6 +121,15 @@ Hipótesis del test:
 
 - H0: la serie no es estacionaria
 - H1: la serie es estacionaria
+
+Vemos que nos sale estos resultados:
+Augmented Dickey-Fuller Test
+
+data:  trading_price
+Dickey-Fuller = -2.3666, Lag order = 11, p-value = 0.4231
+alternative hypothesis: stationary
+
+Observamos que el p-value es bastante mayor que 0.5, por lo que no podemos rechazar la hipótesis nula (H0), por lo que la serie no es estacionaria, teniendo que diferenciar la serie para que lo sea y podamos usar el modelo ARIMA
 
 Si la serie no es estacionaria se aplica **diferenciación**.
 
@@ -153,11 +170,18 @@ Esta función busca automáticamente los mejores parámetros **(p, d, q)** optim
 Se analizan los correlogramas:
 
 - **ACF**
+
+<img width="890" height="491" alt="image" src="https://github.com/user-attachments/assets/79e6f2ea-5031-44c2-aabe-3975680acd2f" />
+
+Vemos que hay uno o más picos en la serie y el resto es 0, por lo que nos encontramos con un modelo de media móvil (MA), es decir el parámetro q no es cero. Una vez sabemos esto, miramos la gráfica PACF para saber el orden o valor del parámetro q
+
 - **PACF**
 
-para estimar manualmente los valores de **p** y **q**.
+<img width="890" height="491" alt="image" src="https://github.com/user-attachments/assets/84b1fc63-caa8-45c7-aba0-fb61b332806a" />
 
-El modelo manual utilizado es:
+Observamos que se convierte en 0 entre el 0.02 y el 0.04, por lo que probaremos entre ese rango de valores (2-4) para obtener un modelo ARIMA óptimo
+
+Después de algunas pruebas, el modelo manual utilizado es:
 
 ```
 ARIMA(0,1,2)
@@ -175,6 +199,10 @@ Para validar el modelo se analizan los **residuos** utilizando:
 checkresiduals()
 ```
 
+<img width="890" height="491" alt="image" src="https://github.com/user-attachments/assets/c72746ab-2516-4f0c-bbf0-6701dec12d89" />
+
+En primer lugar podemos concluir que hay una distribución normal (como vemos en el tercer gráfico), luego podemos observar la primera gráfica, que simplemente son los residuos del modelo y la segunda es el correlograma del modelo
+
 También se aplica el **test de Ljung-Box**.
 
 Hipótesis:
@@ -185,8 +213,20 @@ Hipótesis:
 Para que el modelo sea adecuado los residuos deben:
 
 - tener media cercana a cero
+
+<img width="422" height="44" alt="image" src="https://github.com/user-attachments/assets/cf238314-cd7f-40dc-8f4a-e29b948edb90" />
+
+Vemos que la media es muy cercana a cero, por lo que este requisito se cumple sin problemas
+
 - no presentar autocorrelación
+
+<img width="488" height="170" alt="image" src="https://github.com/user-attachments/assets/b29904a2-e841-429d-8ed0-c74d11b08637" />
+
+En este caso, vemos que el p-value es bastante mayor que 0.5, por lo que no podemos rechazar la hipótesis nula, por lo que no hay una correlación evidente, de manera que se cumple otro de los requisitos para la validación del modelo
+
 - seguir aproximadamente una distribución normal
+
+Hemos visto anteriormente que sigue una distribución normal
 
 ---
 
@@ -208,6 +248,9 @@ autoplot()
 
 donde también se muestran los **intervalos de confianza**.
 
+<img width="890" height="491" alt="image" src="https://github.com/user-attachments/assets/e3284b40-ce6f-4070-ac43-fd2618c7d0c8" />
+
+
 ---
 
 # Ampliaciones
@@ -227,7 +270,11 @@ Posteriormente:
 
 Para evaluar el error del modelo se calcula:
 
-**RMSE (Root Mean Squared Error)**
+**RMSE (Root Mean Squared Error)**, cuyo valor es de 16.8
+
+Aquí se puede observar la gráfica de test vs predicción
+
+<img width="890" height="491" alt="image" src="https://github.com/user-attachments/assets/c7ff0b42-65d9-4259-9aaa-4e067a9181a3" />
 
 ---
 
@@ -243,6 +290,8 @@ Para ello:
 - se generan predicciones para los próximos **500 días**
 
 La comparación visual muestra que **Prophet puede ajustarse mejor a corto plazo**, aunque a largo plazo los intervalos de confianza aumentan.
+
+<img width="890" height="491" alt="image" src="https://github.com/user-attachments/assets/f1ab97d8-be44-4a4b-94a6-16872f8dd03a" />
 
 ---
 
@@ -263,6 +312,8 @@ Posteriormente se representan en un gráfico comparando:
 - posibles anomalías detectadas
 
 En este caso no se detectan outliers significativos.
+
+<img width="890" height="491" alt="image" src="https://github.com/user-attachments/assets/ef74e305-9bef-4bb7-af88-43026d8fee68" />
 
 ---
 # Resultados principales
