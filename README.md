@@ -265,7 +265,22 @@ Posteriormente se representan en un gráfico comparando:
 En este caso no se detectan outliers significativos.
 
 ---
+# Resultados principales
 
+- El modelo ARIMA seleccionado fue determinado mediante `auto.arima()`.
+- Los residuos del modelo cumplen las condiciones de ruido blanco según el test de Ljung-Box.
+- El error de predicción obtenido en el conjunto de test fue:
+
+RMSE ≈ 16
+
+Esto indica que el modelo consigue capturar la tendencia general del precio de la acción, aunque existen errores en momentos de alta volatilidad del mercado.
+
+La comparación con Prophet muestra que:
+
+- Prophet se ajusta mejor a corto plazo.
+- A largo plazo ambos modelos presentan intervalos de confianza similares.
+
+---
 # Autor
 
-Proyecto académico de análisis de **series temporales y forecasting en R** aplicado a datos financieros.
+Proyecto académico de análisis de **series temporales y forecasting en R** aplicado a datos financieros, hecho por Adrián García García.
