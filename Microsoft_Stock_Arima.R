@@ -212,7 +212,6 @@ print("this makes the error much higher")
 # Nos quedaremos solo con la fecha y el precio de la acción que es lo que nos interesa
 
 microsoft_trading_df <- microsoft_stock_df[, c("Date", "trading_price")]
-microsoft_trading_df
 
 # Lo convertimos a tabla
 microsoft_trading_df <- microsoft_trading_df %>% 
@@ -225,7 +224,6 @@ colnames(microsoft_trading_df)[2] <- "y"
 
 # Entrenamos el modelo Prophet
 model_prophet <- prophet(microsoft_trading_df)
-model_prophet
 # Hacemos un dataframe donde se guardará los datos que se prediga
 future = make_future_dataframe(model_prophet,periods = 500, freq="day")
 
